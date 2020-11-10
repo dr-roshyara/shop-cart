@@ -1,4 +1,4 @@
-# algi-cart
+# Shop-cart
 
 ## Project setup
 ```
