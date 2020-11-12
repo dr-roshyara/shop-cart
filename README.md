@@ -1,5 +1,5 @@
 # Shop-cart
-
+This shopping cart is created by using Vue and Vuex.  
 ## Project setup
 ```
 npm install
