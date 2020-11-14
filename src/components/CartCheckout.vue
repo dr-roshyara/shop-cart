@@ -28,7 +28,7 @@
     </div>
     <div v-else>
         <h3 class="total">
-            Gesammtpreis: {{ totalPrice() }}€
+            Gesammtpreis: {{ totalPrice() }}
         </h3>
 
         <btn btnColor="btn btn-small btn-info" @click="download('c:/tmp/hello.txt','This is the content of my file')"> Bestellen</btn>
