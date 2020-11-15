@@ -32,8 +32,15 @@
         </h3>
 
         <btn btnColor="btn btn-small btn-info" @click="download('c:/tmp/hello.txt','This is the content of my file')"> Bestellen</btn>
-
+         <!-- <div ref="paypal"></div> -->
+        <btn btnColor="btn btn-small btn-info" @click="paymentmethod"> Pay Bestellen</btn>
+        <!-- <script>paypal.Buttons().render('body');</script> -->
+         
     </div>
+     <div v-if="paidFor">  
+            <h3>Payment was successful</h3>
+    </div>
+         <div ref="paypal"></div>
 </div>
 </template>
 
@@ -47,6 +54,17 @@ export default {
     components: {
         Btn
     },
+    data(){
+        return {
+            loaded:false,
+            paidFor:false,
+            paypal: {
+            sandbox: 'AZ-C8bHdHzQC1YUCCktr-b3eUN--b75lx_gfR_PngqtseH7Xgsb28fIt1AZScStFxKqoMSmDEh_2GgYf',
+            production: '<production client id>'
+            }
+        }
+    },
+  
     computed: {
         ...mapGetters({
             // getProductsInCart: 'getProductsInCart',
@@ -99,8 +117,47 @@ export default {
             element.click();
 
             document.body.removeChild(element);
-        }
-
+        },
+        
+         setLoaded: function() {
+          this.loaded = true;
+          let totalPrice =this.totalPrice();
+          window.paypal.Buttons({
+            createOrder: function(data, actions) {
+            // This function sets up the details of the transaction, including the amount and line item details.
+            return actions.order.create({
+                purchase_units: [{
+                    description: "this is my description",
+                amount: {
+                    value: totalPrice,
+                }
+                }]
+            });
+            },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            this.paidFor = true;
+            console.log(order);
+          },
+          onError: err => {
+            console.log(err);
+          }
+        })
+        .render(this.$refs.paypal);
+         },
+         paymentmethod:function() {
+    const script = document.createElement("script");
+      var url =       "https://www.paypal.com/sdk/js?client-id="+this.paypal.sandbox; // concate adds the two strings together 
+       script.src =url; 
+      //  "https://www.paypal.com/sdk/js?client-id=AZ-C8bHdHzQC1YUCCktr-b3eUN--b75lx_gfR_PngqtseH7Xgsb28fIt1AZScStFxKqoMSmDEh_2GgYf";
+        script.addEventListener("load", this.setLoaded);
+      document.body.appendChild(script);
+  }, 
+         
+         
+         
+        
+    //end of function method 
     },
 };
 </script>
