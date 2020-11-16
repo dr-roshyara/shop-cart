@@ -33,7 +33,7 @@
 
         <btn btnColor="btn btn-small btn-info" @click="download('c:/tmp/hello.txt','This is the content of my file')"> Bestellen</btn>
          <!-- <div ref="paypal"></div> -->
-        <btn btnColor="btn btn-small btn-info" @click="paymentmethod"> Pay Bestellen</btn>
+        <btn btnColor="btn btn-small btn-info" @click="paymentmethod"> Mit Paypal bezahlen</btn>
         <!-- <script>paypal.Buttons().render('body');</script> -->
          
     </div>
@@ -128,7 +128,9 @@ export default {
             return actions.order.create({
                 purchase_units: [{
                     description: "this is my description",
+                     custom_id: this.orderId,
                 amount: {
+                     currency_code: "EUR",
                     value: totalPrice,
                 }
                 }]
@@ -138,6 +140,7 @@ export default {
             const order = await actions.order.capture();
             this.paidFor = true;
             console.log(order);
+            this.$emit('payment-completed', order);
           },
           onError: err => {
             console.log(err);
@@ -147,7 +150,7 @@ export default {
          },
          paymentmethod:function() {
     const script = document.createElement("script");
-      var url =       "https://www.paypal.com/sdk/js?client-id="+this.paypal.sandbox; // concate adds the two strings together 
+      var url =       "https://www.paypal.com/sdk/js?client-id="+this.paypal.sandbox+"&currency=EUR"; // concate adds the two strings together 
        script.src =url; 
       //  "https://www.paypal.com/sdk/js?client-id=AZ-C8bHdHzQC1YUCCktr-b3eUN--b75lx_gfR_PngqtseH7Xgsb28fIt1AZScStFxKqoMSmDEh_2GgYf";
         script.addEventListener("load", this.setLoaded);

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AllProducts from '../views/AllProducts'
 import CartCheckout from '../views/CartCheckout';
+import PaypalCheckout from '../views/PaypalCheckout'
 const routes = [
   {
     path: '/',
@@ -34,6 +35,13 @@ const routes = [
     path: '/checkout',
     name: 'Checkout',
     component: CartCheckout,
+  },
+  {
+    path:'/paypal',
+    name:'Paypal',
+    component:PaypalCheckout 
+
+
   }
 ]
 
